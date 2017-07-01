@@ -1,0 +1,7 @@
+/*
+ * Developer: Nigam
+ * Description: This trigger is fired when Owner on lead record is updated
+ */
+trigger leadTrigger on Lead (after update) {
+    leadTriggerHandler.afterUpdate(Trigger.new,Trigger.oldMap);
+}

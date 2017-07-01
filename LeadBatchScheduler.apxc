@@ -1,0 +1,21 @@
+/*
+ * Developer: Nigam
+ * Description: Scheduler to run every 15 minutes
+ */
+global class LeadBatchScheduler implements Schedulable{
+    public Set<Id> leadIds;
+    
+    global LeadBatchScheduler(Set<Id> leadIds){ 
+        this.leadIds = leadIds;
+    } 
+    
+    global void execute(SchedulableContext ctx){
+       List<Lead> leadObjList  = [Select id,Entropy__c,(Select IsTask From ActivityHistories) From Lead WHERE Id In :leadIds];
+        for(lead leadObj:leadObjList){
+            if(leadObj.ActivityHistories.size() == 0){
+                ++leadObj.Entropy__c;
+            }
+        }
+        update leadObjList;
+    }
+}

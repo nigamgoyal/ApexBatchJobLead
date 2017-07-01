@@ -1,0 +1,22 @@
+/*
+ * Developer: Nigam
+ * Description: Trigger handler to run scheduled cron job
+ */
+public class leadTriggerHandler {
+
+    public static void afterUpdate(List<Lead> leadList,Map<Id,Lead> oldleadMap){
+        Set<Id> leadIds = new Set<Id>();
+        for(Lead leadObj:leadList){
+            if(oldLeadMap.get(leadObj.Id).OwnerId != leadObj.OwnerId){
+                leadIds.add(leadObj.Id); 
+            }
+        }
+         
+        if(leadIds.size() > 0){
+            LeadBatchScheduler leadBatchObj = new LeadBatchScheduler(leadIds);
+            
+            String sch = '0 15 * * * ? *';
+			String jobID = System.schedule('Remind Opp Owners', sch, leadBatchObj);
+        }
+    }
+}
